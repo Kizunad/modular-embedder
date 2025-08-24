@@ -5,18 +5,18 @@ import (
 	"fmt"
 	"log"
 
-	embedder "embedder"
+	embedder "github.com/Kizunad/modular-embedder"
 )
 
 func main() {
 	// 示例1: 链式调用方式
 	fmt.Println("=== 示例1: 链式调用方式 ===")
-	
+
 	e1, err := embedder.New("ollama").
 		WithBaseURL("http://localhost:11434").
-		WithModel("qwen2.5:7b").
+		WithModel("nomic-embed-text").
 		Build()
-	
+
 	if err != nil {
 		log.Printf("创建embedder失败: %v", err)
 		return
@@ -30,7 +30,7 @@ func main() {
 	if err != nil {
 		log.Printf("嵌入失败: %v", err)
 	} else {
-		fmt.Printf("单个文本嵌入结果 (前3个值): [%.3f, %.3f, %.3f...]\n", 
+		fmt.Printf("单个文本嵌入结果 (前3个值): [%.3f, %.3f, %.3f...]\n",
 			embedding[0], embedding[1], embedding[2])
 	}
 
@@ -48,7 +48,7 @@ func main() {
 	// 创建配置文件
 	configContent := `provider: "ollama"
 base_url: "http://localhost:11434"
-model: "qwen2.5:7b"
+model: "nomic-embed-text"
 timeout: "30s"
 options:
   temperature: 0.7`
@@ -78,9 +78,9 @@ options:
 	if err != nil {
 		log.Printf("创建mock embedder失败: %v", err)
 	} else {
-		fmt.Printf("Mock embedder - 模型: %s, 维度: %d\n", 
+		fmt.Printf("Mock embedder - 模型: %s, 维度: %d\n",
 			mockEmbedder.GetModel(), mockEmbedder.GetDimension())
-		
+
 		mockEmbedding, _ := mockEmbedder.EmbedSingle(ctx, "test")
 		fmt.Printf("Mock嵌入结果: %v\n", mockEmbedding)
 	}
@@ -98,7 +98,7 @@ options:
 		if err != nil {
 			log.Printf("分批嵌入失败: %v", err)
 		} else {
-			fmt.Printf("分批处理 %d 个文本，每批 5 个，共得到 %d 个嵌入向量\n", 
+			fmt.Printf("分批处理 %d 个文本，每批 5 个，共得到 %d 个嵌入向量\n",
 				len(largeTexts), len(batchEmbeddings))
 		}
 	}

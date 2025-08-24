@@ -1,4 +1,4 @@
-module embedder
+module github.com/Kizunad/modular-embedder
 
 go 1.21
 
